@@ -1,11 +1,31 @@
-function filtrarPares(numeros) {
-    numerosPares = []
-    for(numero of numeros) {
-        if(numero % 2 == 0) {
-            numerosPares.push(numero)
-        }
-    }
-    return numerosPares
+const express = require('express')
+const { Client } = require('pg')
+require("dotenv").config()
+
+const client = new Client({
+    host: process.env.host,
+    port: process.env.port,
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database
+})
+
+const app = express()
+
+const connectDB = async () => {
+    client
+    .connect()
+    .then(() => {
+        console.log("a conexão funcionou")
+    })
+    .catch((err) => {
+        console.log("erro ao conectar na db")
+    })
 }
 
-console.log(filtrarPares([1, 2, 3, 4, 5]))
+app.get('/test-api', function (req, res) {
+    res.send('{}')
+})
+
+app.listen(3000)
+connectDB()
